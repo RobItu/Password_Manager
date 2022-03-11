@@ -40,8 +40,16 @@ def save():
     if len(website) <= 0 or len(password) <= 0 or len(email_username) <= 0:
         messagebox.showwarning(title="ERROR", message="Please make sure all entries are filled")
     else:
-        with open("data.json", "w") as file:
-            json.dump(new_data, file)
+        try:
+            with open("data.json", "r") as file:
+                data = json.load(file)
+                data.update(new_data)
+        except FileNotFoundError:
+            with open("data.json", "w") as file:
+                json.dump(new_data, file, indent=4)
+        else:
+            with open("data.json", "w") as file:
+                json.dump(data, file, indent=4)
 
         website_entry.delete(0, END)
         email_entry.delete(0, END)
